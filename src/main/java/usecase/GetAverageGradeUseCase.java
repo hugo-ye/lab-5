@@ -4,6 +4,8 @@ import api.GradeDataBase;
 import entity.Grade;
 import entity.Team;
 
+import java.io.IOException;
+
 /**
  * GetAverageGradeUseCase class.
  */
@@ -34,9 +36,14 @@ public final class GetAverageGradeUseCase {
             return 0;
         }
         for(String e: members){
-            Grade grade = gradeDataBase.getGrade(e, course);
-            sum += grade.getGrade();
+            try{
+                Grade grade = gradeDataBase.getGrade(e, course);
+                sum += grade.getGrade();
+            }catch(Exception ex){
+                System.out.println(ex);
+                count--;
+            }
         }
-        return sum / count;
+        return count == 0 ? 0:  sum / count;
     }
 }
